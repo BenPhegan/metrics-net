@@ -17,6 +17,8 @@ namespace metrics
     {
         private static readonly ConcurrentDictionary<MetricName, IMetric> _metrics = new ConcurrentDictionary<MetricName, IMetric>();
 
+        private static ConsoleReporter reporter;
+
         /// <summary>
         /// A convenience method for installing a gauge that is bound to a <see cref="PerformanceCounter" />
         /// </summary>
@@ -190,8 +192,19 @@ namespace metrics
         /// <param name="unit">The time unit of the period</param>
         public static void EnableConsoleReporting(long period, TimeUnit unit)
         {
-            var reporter = new ConsoleReporter();
+            reporter = new ConsoleReporter();
             reporter.Start(period, unit);
+        }
+
+        /// <summary>
+        /// Allows cancelling of Console Reporting
+        /// </summary>
+        public static void DisableConsoleReporting()
+        {
+            if (reporter != null)
+            {
+                reporter.Stop();
+            }
         }
 
         /// <summary>
